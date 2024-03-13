@@ -1,15 +1,22 @@
 $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
 code: model
-command: >-
-  python 
-  --
-  --
+command: |
+  echo "Hello, world!"
+  ls -la
+  python train.py --training_data ${{inputs.training_data}} --reg_rate ${{inputs.reg_rate}}
 inputs:
   training_data: 
     type: uri_folder 
-    path: 
+    path: azureml:diabetes-dev-folder:1
   reg_rate: 0.01
 environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
-compute: 
-experiment_name: 
-description: 
+compute: azureml:shahcompute # maybe local needs docker
+experiment_name: DummyExperiment 
+description: |
+  # Azure Machine Learning "hello world" job
+
+  This is a "hello world" job running in the cloud via Azure Machine Learning!
+
+  ## Description
+
+  Markdown is supported in the studio for job descriptions! You can edit the description there or via CLI.
