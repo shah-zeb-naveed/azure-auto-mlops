@@ -1,0 +1,19 @@
+name: Automaticalyl test linting and unit tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+    - name: Placeholder
+      run: |
+        echo "Will add code checks here in next challenge"
