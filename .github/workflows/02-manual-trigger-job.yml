@@ -23,5 +23,5 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - name: Run command
-      run: az ml job create --file src/job.yml
+      run: az ml job create --file src/job.yml --resource-group testshahzeb --workspace-name mlshah
 
