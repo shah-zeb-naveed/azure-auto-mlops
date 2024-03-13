@@ -8,6 +8,10 @@ import pandas as pd
 import mlflow
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+import numpy as np
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+import matplotlib.pyplot as plt
 
 # define functions
 def main(args):
@@ -21,8 +25,21 @@ def main(args):
     X_train, X_test, y_train, y_test = split_data(df)
 
     # train model
-    train_model(args.reg_rate, X_train, X_test, y_train, y_test)
-
+    model = train_model(args.reg_rate, X_train, X_test, y_train, y_test)
+    y_hat = model.predict(X_test)
+    acc = np.average(y_hat == y_test)
+    y_scores = model.predict_proba(X_test)
+    auc = roc_auc_score(y_test, y_scores[:, 1])
+    # plot ROC curve
+    fpr, tpr, thresholds = roc_curve(y_test, y_scores[:, 1])
+    fig = plt.figure(figsize=(6, 4))
+    # Plot the diagonal 50% line
+    plt.plot([0, 1], [0, 1], 'k--')
+    # Plot the FPR and TPR achieved by our model
+    plt.plot(fpr, tpr)
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('ROC Curve')
 
 def get_csvs_df(path):
     if not os.path.exists(path):
@@ -36,12 +53,14 @@ def get_csvs_df(path):
 # TO DO: add function to split data
 
 def split_data(df):
-    X, y = df[['Pregnancies','PlasmaGlucose','DiastolicBloodPressure','TricepsThickness','SerumInsulin','BMI','DiabetesPedigree','Age']].values, df['Diabetic'].values
+    X, y = df[['Pregnancies','PlasmaGlucose','DiastolicBloodPressure',
+               'TricepsThickness','SerumInsulin','BMI','DiabetesPedigree','Age']].values, df['Diabetic'].values
     return train_test_split(X, y, test_size=0.30, random_state=0)
 
 def train_model(reg_rate, X_train, X_test, y_train, y_test):
     # train model
-    model = LogisticRegression(C=1/reg_rate, solver="liblinear").fit(X_train, y_train)
+    model = LogisticRegression(C=1/reg_rate, solver="liblinear")\
+        .fit(X_train, y_train)
 
 
 def parse_args():
