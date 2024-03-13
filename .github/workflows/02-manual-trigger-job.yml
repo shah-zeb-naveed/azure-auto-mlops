@@ -25,5 +25,5 @@ jobs:
     - name: Set defaults
       run: az configure --defaults group=testshahzeb && az configure --defaults workspace=mlshah
     - name: Run command
-      run: az ml compute start -n shahcompute && az ml job create --file src/job.yml
+      run: az ml compute start -n shahcluster && az ml job create --file src/job.yml
 
