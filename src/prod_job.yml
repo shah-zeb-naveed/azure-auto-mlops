@@ -9,14 +9,11 @@ inputs:
     type: uri_folder 
     path: azureml:diabetes-prod-folder:1
   reg_rate: 0.01
-environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@latest
+environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@45 #
 compute: azureml:shahcluster # maybe local needs docker
 experiment_name: DummyExperiment 
 description: |
   # Azure Machine Learning "hello world" job
-
   This is a "hello world" job running in the cloud via Azure Machine Learning!
-
   ## Description
-
   Markdown is supported in the studio for job descriptions! You can edit the description there or via CLI.

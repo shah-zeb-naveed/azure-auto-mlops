@@ -1,0 +1,6 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineDeployment.schema.json
+name: model3-4
+endpoint_name: endpoint1
+model: azureml:model3:3
+instance_type: Standard_D2as_v4
+instance_count: 1
