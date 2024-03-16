@@ -1,0 +1,43 @@
+# azcli format for azure cli extensio help
+
+# create az ml workspace
+az login
+
+# set defaults
+az configure --defaults group=testshahzeb workspace=mlshah
+
+# create compute
+az ml compute create --name shahcompute --size STANDARD_DS11_V2 --type ComputeInstance
+
+# start if not running
+az ml compute start -n shahcompute
+
+# register data asset
+az ml data create --name diabetes-dev-folder --path experimentation/data
+
+# create environemnt
+az ml environment create --file src/custom_env.yml
+
+# create job
+run_id=$(az ml job create --file production/prod_job.yml --query name -o tsv)
+
+# create service principal
+# fails:
+# A Service Principal is an AAD Application’s representation in a tenant, or “an identity for the app”. It can be added like a user in Azure’s Role-Based Access Control.
+# because uwaterloo tenant doesn't allow students to craete a new app
+# BUT: creating a user-defined managed identity works
+# az ad sp create-for-rbac --name "shahzebsp" --role contributor --scopes /subscriptions/cbf3c2bc-f849-4948-b270-2bb9a98e2a3d/resourceGroups/testshahzeb --sdk-auth
+
+# create model (using job output)
+az ml model create --file production/register_model.yml --path runs:/$run_id/model
+
+# create endpoint
+az ml online-endpoint create --file production/endpoint.yml
+
+# get latest version dynamically
+latest_version=$(az ml model list --name "model5" --query "[].[version]" -o tsv | sort -n | tail -n 1)
+sed -i "s/azureml:model5:[0-9]*/azureml:model5:$latest_version/" production/deployment.yml
+
+# create deployment
+az ml online-deployment create --file production/deployment.yml
+

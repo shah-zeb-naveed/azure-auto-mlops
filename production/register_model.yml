@@ -1,0 +1,5 @@
+$schema: https://azuremlschemas.azureedge.net/latest/model.schema.json
+name: model3
+type: mlflow_model
+#alternatively:
+#path: azureml://jobs/orange_wing_2crcqq0gls/outputs/artifacts/paths/model

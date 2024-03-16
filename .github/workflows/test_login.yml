@@ -1,5 +1,6 @@
 name: Run Azure Login with OpenID Connect and PowerShell
-on: workflow_dispatch:
+on:
+  workflow_dispatch:
 #[push]
 
 permissions:
@@ -13,7 +14,7 @@ jobs:
       - name: OIDC Login to Azure Public Cloud with AzPowershell (enableAzPSSession true)
         uses: azure/login@v1
         with:
-          enable-AzPSSession: true
+          enable-AzPSSession: true # interestingly this gives subscriptionid error. maybe PSSession is not tested.
           auth-type: IDENTITY
           client-id: ${{ secrets.AZURE_CLIENT_ID }}          
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}

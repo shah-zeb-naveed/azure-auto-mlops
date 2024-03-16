@@ -1,0 +1,34 @@
+name: Automatically deploy
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploymodel:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+    - name: Check out repo
+      uses: actions/checkout@main
+    - name: Install az ml extension
+      run: az extension add -n ml -y
+    - name: Azure login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - name: Set defaults
+      run: az configure --defaults group=testshahzeb && az configure --defaults workspace=mlshah
+    - name: Create endpoint
+      run: az ml online-endpoint create --file production/endpoint.yml
+    - name: Update version number
+      run: latest_version=$(az ml model list --name "model5" --query "[].[version]" -o tsv | sort -n | tail -n 1) && sed -i "s/azureml:model5:[0-9]*/azureml:model5:$latest_version/" production/deployment.yml
+    - name: Update deployment
+      run: if az ml online-deployment show --name model5-blue --query "name" -o tsv > /dev/null 2>&1; then az ml online-deployment update --name model5-blue --file production/deployment.yml; else az ml online-deployment create --file production/deployment.yml; fi
+
