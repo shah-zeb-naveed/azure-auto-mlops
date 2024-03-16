@@ -2,7 +2,7 @@ name: Automatically deploy
 on:
   push:
     branches:
-      - master
+      - main
 
 permissions:
   id-token: write
