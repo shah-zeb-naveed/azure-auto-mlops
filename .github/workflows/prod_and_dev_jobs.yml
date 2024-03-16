@@ -1,6 +1,9 @@
-name: Manually trigger an Azure Machine Learning job
+name: Automatically test dev Azure Machine Learning job and if successful, create production
 
-on: [push]
+on:
+  pull_request:
+    branches:
+      - main
 
 permissions:
   id-token: write
