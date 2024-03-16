@@ -1,6 +1,8 @@
 name: Automatically deploy
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 permissions:
   id-token: write
@@ -26,7 +28,7 @@ jobs:
     - name: Create endpoint
       run: az ml online-endpoint create --file production/endpoint.yml
     - name: Update version number
-      run: latest_version=$(az ml model list --name "model3" --query "[].[version]" -o tsv | sort -n | tail -n 1) && sed -i "s/azureml:model3:[0-9]*/azureml:model3:$latest_version/" production/deployment.yml
+      run: latest_version=$(az ml model list --name "model5" --query "[].[version]" -o tsv | sort -n | tail -n 1) && sed -i "s/azureml:model5:[0-9]*/azureml:model5:$latest_version/" production/deployment.yml
     - name: Update deployment
       run: az ml online-deployment update --file production/deployment.yml
 

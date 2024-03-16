@@ -6,10 +6,10 @@ command: |
   python train.py --training_data ${{inputs.training_data}} --reg_rate ${{inputs.reg_rate}}
 inputs:
   training_data: 
-    type: uri_folder 
+    type: uri_folder
     path: azureml:diabetes-prod-folder:1
   reg_rate: 0.01
-environment: azureml:AzureML-sklearn-0.24-ubuntu18.04-py37-cpu@45 #
+environment: azureml:AzureML-sklearn-1.0-ubuntu20.04-py38-cpu@latest #
 compute: azureml:shahcluster # maybe local needs docker
 experiment_name: DummyExperiment 
 description: |

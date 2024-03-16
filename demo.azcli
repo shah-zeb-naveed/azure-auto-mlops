@@ -15,8 +15,11 @@ az ml compute start -n shahcompute
 # register data asset
 az ml data create --name diabetes-dev-folder --path experimentation/data
 
+# create environemnt
+az ml environment create --file src/custom_env.yml
+
 # create job
-run_id=$(az ml job create --file src/job.yml --query name -o tsv)
+run_id=$(az ml job create --file production/prod_job.yml --query name -o tsv)
 
 # create service principal
 # fails:
@@ -32,8 +35,8 @@ az ml model create --file production/register_model.yml --path runs:/$run_id/mod
 az ml online-endpoint create --file production/endpoint.yml
 
 # get latest version dynamically
-latest_version=$(az ml model list --name "model3" --query "[].[version]" -o tsv | sort -n | tail -n 1)
-sed -i "s/azureml:model3:[0-9]*/azureml:model3:$latest_version/" production/deployment.yml
+latest_version=$(az ml model list --name "model5" --query "[].[version]" -o tsv | sort -n | tail -n 1)
+sed -i "s/azureml:model5:[0-9]*/azureml:model5:$latest_version/" production/deployment.yml
 
 # create deployment
 az ml online-deployment create --file production/deployment.yml
