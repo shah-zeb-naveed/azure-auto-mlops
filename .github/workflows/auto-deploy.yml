@@ -26,7 +26,7 @@ jobs:
     - name: Set defaults
       run: az configure --defaults group=testshahzeb && az configure --defaults workspace=mlshah
     - name: Create endpoint
-      run: f az ml online-endpoint show --name mlendpoint1 --query "name" -o tsv > /dev/null 2>&1; then az ml online-endpoint update --name mlendpoint1 --file production/endpoint.yml; else az ml online-endpoint create --file production/endpoint.yml; fi
+      run: if az ml online-endpoint show --name mlendpoint1 --query "name" -o tsv > /dev/null 2>&1; then az ml online-endpoint update --name mlendpoint1 --file production/endpoint.yml; else az ml online-endpoint create --file production/endpoint.yml; fi
     - name: Update version number
       run: latest_version=$(az ml model list --name "model5" --query "[].[version]" -o tsv | sort -n | tail -n 1) && sed -i "s/azureml:model5:[0-9]*/azureml:model5:$latest_version/" production/deployment.yml
     - name: Update deployment
