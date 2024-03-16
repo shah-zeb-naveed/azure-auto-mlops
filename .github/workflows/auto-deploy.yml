@@ -30,5 +30,5 @@ jobs:
     - name: Update version number
       run: latest_version=$(az ml model list --name "model5" --query "[].[version]" -o tsv | sort -n | tail -n 1) && sed -i "s/azureml:model5:[0-9]*/azureml:model5:$latest_version/" production/deployment.yml
     - name: Update deployment
-      run: az ml online-deployment update --file production/deployment.yml
+      run: if az ml online-deployment show --name model5-blue --query "name" -o tsv > /dev/null 2>&1; then az ml online-deployment update --name model5-blue --file production/deployment.yml; else az ml online-deployment create --file production/deployment.yml; fi
 
