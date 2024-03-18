@@ -4,6 +4,7 @@ A repository containing some projects I deployed in Azure Machine Learning, focu
 
 - Implemented different environments in Github with Azure User-Assigned Managed Idenitity
 - Configured CI/CD using Github Actions including linting, unit testing, automatic deployment and endpoint set-up
+- Upon PR to main, the training script is run/test automatically and if successful, a new production run is created upon approval. Once merged to main, an endpoint is updated/created and the model is re/deployed.
 - Used Azure curated conda environement for Python 3.8 (a required fix as Azure curated environment for 3.7 crashes due to dependency resolution issues)
 - An MLFLOW model (Logistic Regression) deployed on a real-time endpoint in Azure:
 
